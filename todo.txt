@@ -1,0 +1,28 @@
+(A) Add user registration form + password hashing + login middleware @auth @backend
+(B) Create SQL schema for users table @auth @db
+(C) Create poll_lists table with user_id FK @poll @db
+(C) Build "New Poll List" form (HTMX) @poll @frontend
+(C) Implement backend handler for poll list creation @poll @backend
+(C) Create poll_items table with fields: name, description, image, video @poll @db
+(D) Build HTMX-based UI for adding/editing poll items @poll @frontend
+(D) Implement backend to save/update poll items @poll @backend
+(E) Create public list page with "Start Polling" button @polling @frontend
+(E) Build polling UI (drag-drop or score input) using HTMX @polling @frontend
+(E) Record intermediate selections during polling @polling @frontend
+(F) Create poll_results and poll_result_items tables @polling @db
+(F) Store final user ranking on submission @polling @backend
+(F) Show user's personal result view @polling @frontend
+(G) Create paginated view of public poll lists @browse @frontend
+(G) Implement search/filter of poll lists by title or user @browse @backend
+(G) Build public list view page showing items before polling @browse @frontend
+(H) Implement image/video upload support (local or S3) @media @backend
+(H) Display uploaded media in poll items @media @frontend
+(I) Build results page for user-specific result display @results @frontend
+(I) (Optional) Show aggregate poll result (mean ranks) @results @backend
+(J) Use Gin for HTTP server and HTMX endpoints @infra @backend
+(J) Setup PostgreSQL and write SQL migrations @infra @db
+(J) Add OpenTelemetry tracing to backend handlers @infra @observability
+(K) Write unit tests for poll logic and list creation @test @unit
+(K) Write integration test: simulate full poll run @test @integration
+(L) Ensure lists are browsable without auth @security @public
+(L) Enforce login for saving/viewing results @security @auth
