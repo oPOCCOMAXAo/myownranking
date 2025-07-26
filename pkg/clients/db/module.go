@@ -9,7 +9,7 @@ import (
 )
 
 func ModulePostgres() fx.Option {
-	return fx.Options(
+	return fx.Module("clients/db",
 		fx.Provide(
 			fx.Annotate(
 				NewPostgres,

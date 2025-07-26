@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -18,18 +19,21 @@ type Server struct {
 	cfg       Config
 	cancelApp context.CancelCauseFunc
 
-	http *http.Server
-	gin  *gin.Engine
+	logger *slog.Logger
+	http   *http.Server
+	gin    *gin.Engine
 }
 
 //nolint:mnd
 func New(
 	cfg Config,
 	cancelApp context.CancelCauseFunc,
+	logger *slog.Logger,
 ) (*Server, error) {
 	res := &Server{
 		cfg:       cfg,
 		cancelApp: cancelApp,
+		logger:    logger.WithGroup("server"),
 		gin:       gin.New(),
 	}
 
@@ -45,7 +49,9 @@ func New(
 }
 
 func (s *Server) setupMiddleware() {
-	s.gin.Use(gin.Recovery())
+	_ = s.gin.SetTrustedProxies(nil)
+	s.gin.Use(s.mwErrors)
+	s.gin.Use(s.mwRecover)
 }
 
 func (s *Server) OnStart() {

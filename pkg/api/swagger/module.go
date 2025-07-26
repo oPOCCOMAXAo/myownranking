@@ -2,7 +2,7 @@ package swagger
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/opoccomaxao/myownranking/pkg/ginutils"
+	"github.com/opoccomaxao/myownranking/pkg/utils/ginutils"
 	"go.uber.org/fx"
 )
 
@@ -15,6 +15,6 @@ func Invoke() fx.Option {
 func RegisterHandlers(
 	router gin.IRouter,
 ) {
-	router.GET("/api/swagger/*any", fullInstance())
-	router.GET("/api/swagger", ginutils.StaticRedirect("/api/swagger/index.html"))
+	router.GET("/api/swagger/full/*any", fullInstance())
+	router.GET("/api/swagger", ginutils.StaticRedirect("/api/swagger/full/index.html"))
 }

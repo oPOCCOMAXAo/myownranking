@@ -5,7 +5,7 @@ import (
 )
 
 func Module() fx.Option {
-	return fx.Module("server",
+	return fx.Module("services/server",
 		fx.Provide(
 			fx.Annotate(
 				New,

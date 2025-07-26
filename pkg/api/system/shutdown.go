@@ -14,8 +14,6 @@ import (
 //	@Produce		text/plain
 //	@Success		200	"OK"
 //	@Router			/api/shutdown [PUT]
-//
-
 func (s *Service) Shutdown(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 

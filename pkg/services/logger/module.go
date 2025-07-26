@@ -5,7 +5,7 @@ import (
 )
 
 func Module() fx.Option {
-	return fx.Module("logger",
+	return fx.Module("services/logger",
 		fx.Provide(New),
 	)
 }

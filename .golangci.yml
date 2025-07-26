@@ -121,6 +121,11 @@ linters-settings:
       - "github.com/pkg/errors" # all errors in pkg/errors are wrapped
     ignoreSigs:
       - "(*gorm.io/gorm.DB).Transaction" # all errors in gorm transactions are wrapped
+      - "(*github.com/gin-gonic/gin.Error).SetType"
+  errcheck:
+    exclude-functions:
+      - "(*github.com/gin-gonic/gin.Error).SetType"
+      - "(*github.com/gin-gonic/gin.Context).Error"
   varnamelen:
     ignore-names:
       - i

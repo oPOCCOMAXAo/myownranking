@@ -9,7 +9,7 @@ import (
 
 func Invoke() fx.Option {
 	return fx.Module("api/system",
-		fx.Provide(NewService),
+		fx.Provide(NewService, fx.Private),
 		fx.Invoke(RegisterEndpoints),
 	)
 }

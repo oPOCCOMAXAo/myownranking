@@ -2,9 +2,10 @@ package config
 
 import (
 	"github.com/caarlos0/env/v11"
-	"github.com/opoccomaxao/myownranking/pkg/db"
-	"github.com/opoccomaxao/myownranking/pkg/logger"
-	"github.com/opoccomaxao/myownranking/pkg/server"
+	"github.com/opoccomaxao/myownranking/pkg/clients/db"
+	"github.com/opoccomaxao/myownranking/pkg/services/auth"
+	"github.com/opoccomaxao/myownranking/pkg/services/logger"
+	"github.com/opoccomaxao/myownranking/pkg/services/server"
 	"github.com/pkg/errors"
 	"go.uber.org/fx"
 )
@@ -21,6 +22,7 @@ type Config struct {
 	Logger logger.Config `envPrefix:"LOGGER_"`
 	DB     db.Config     `envPrefix:"DB_"`
 	Server server.Config `envPrefix:"SERVER_"`
+	Auth   auth.Config   `envPrefix:"AUTH_"`
 }
 
 func New() (Config, error) {
