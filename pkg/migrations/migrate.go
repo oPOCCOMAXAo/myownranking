@@ -19,6 +19,20 @@ type User struct {
 	DefaultAutoModel
 }
 
+type List struct {
+	models.List
+	DefaultAutoModel
+
+	User *models.User `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+}
+
+type ListElement struct {
+	models.ListElement
+	DefaultAutoModel
+
+	List *List `gorm:"foreignKey:ListID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+}
+
 //go:embed sql/updated_at.sql
 var sqlUpdatedAt string
 
@@ -30,6 +44,8 @@ func Migrate(
 
 	err := db.AutoMigrate(
 		&User{},
+		&List{},
+		&ListElement{},
 	)
 	if err != nil {
 		return errors.WithStack(err)

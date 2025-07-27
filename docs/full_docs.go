@@ -180,6 +180,72 @@ const docTemplatefull = `{
                 }
             }
         },
+        "/api/lists": {
+            "post": {
+                "security": [
+                    {
+                        "StdAuth": []
+                    }
+                ],
+                "description": "Retrieve lists created by a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lists"
+                ],
+                "summary": "Get user lists",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID. If not provided, uses the authenticated user ID.",
+                        "name": "user_id",
+                        "in": "formData"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lists.GetUserListsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/shutdown": {
             "put": {
                 "description": "Shutdown the API server gracefully",
@@ -358,6 +424,20 @@ const docTemplatefull = `{
                 }
             }
         },
+        "lists.GetUserListsResponse": {
+            "type": "object",
+            "properties": {
+                "lists": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ListAPI"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -366,6 +446,20 @@ const docTemplatefull = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "models.ListAPI": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "is_public": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

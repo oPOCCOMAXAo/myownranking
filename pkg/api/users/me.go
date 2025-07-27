@@ -1,4 +1,4 @@
-package user
+package users
 
 import (
 	"errors"
@@ -39,8 +39,5 @@ func (s *Service) GetMe(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, &models.UserAPI{
-		ID:   user.ID,
-		Name: user.Name,
-	})
+	ctx.JSON(http.StatusOK, models.UserAPI{}.FromModel(user, 0))
 }

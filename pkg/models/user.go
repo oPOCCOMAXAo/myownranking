@@ -15,3 +15,10 @@ type UserAPI struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
 }
+
+func (UserAPI) FromModel(user *User, _ int) *UserAPI {
+	return &UserAPI{
+		ID:   user.ID,
+		Name: user.Name,
+	}
+}

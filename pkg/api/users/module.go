@@ -1,4 +1,4 @@
-package user
+package users
 
 import (
 	"github.com/gin-gonic/gin"
@@ -8,7 +8,7 @@ import (
 )
 
 func Invoke() fx.Option {
-	return fx.Module("api/user",
+	return fx.Module("api/users",
 		fx.Provide(NewService, fx.Private),
 		fx.Invoke(RegisterHandlers),
 	)
