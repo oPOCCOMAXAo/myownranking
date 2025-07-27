@@ -10,3 +10,8 @@ type User struct {
 func (User) TableName() string {
 	return "users"
 }
+
+type UserAPI struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+}

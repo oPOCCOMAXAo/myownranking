@@ -216,26 +216,33 @@ func (s *Service) GetUserIDByAuthToken(
 	return userID, nil
 }
 
-func (s *Service) MiddlewareAuth(ctx *gin.Context) {
+func (s *Service) MiddlewareAuthCache(ctx *gin.Context) {
 	authToken := ctx.GetHeader("Authorization")
 	if authToken == "" {
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, &models.ErrorResponse{
-			Errors: []string{"Authorization required"},
-		})
-
 		return
 	}
 
 	userID, err := s.GetUserIDByAuthToken(ctx, authToken)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, &models.ErrorResponse{
-			Errors: []string{"Invalid authorization"},
+			Errors: []string{"Invalid authorization token"},
 		})
 
 		return
 	}
 
 	values.UserID.Set(ctx, userID)
+}
 
-	ctx.Next()
+// MiddlewareAuthRequired godoc
+//
+// Must be called after MiddlewareAuthCache to ensure UserID is available.
+func (s *Service) MiddlewareAuthRequired(ctx *gin.Context) {
+	if values.UserID.IsEmpty(ctx) {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, &models.ErrorResponse{
+			Errors: []string{"Authorization required"},
+		})
+
+		return
+	}
 }

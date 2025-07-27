@@ -7,6 +7,7 @@ import (
 	"github.com/opoccomaxao/myownranking/pkg/services/auth"
 	"github.com/opoccomaxao/myownranking/pkg/services/logger"
 	"github.com/opoccomaxao/myownranking/pkg/services/server"
+	"github.com/opoccomaxao/myownranking/pkg/services/user"
 	"go.uber.org/fx"
 )
 
@@ -24,6 +25,7 @@ func Run() error {
 		db.ModulePostgres(),
 		server.Module(),
 		auth.Module(),
+		user.Module(),
 
 		// Invoke
 

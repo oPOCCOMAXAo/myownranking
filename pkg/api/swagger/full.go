@@ -9,11 +9,15 @@ import (
 
 // fullInstance godoc
 //
-//	@title			MyOwnRanking API Full.
-//	@version		1.0
-//	@description	My Own Ranking API server.
-//	@termsOfService	http://swagger.io/terms/
-//	@basepath		/
+//	@title						MyOwnRanking API Full.
+//	@version					1.0
+//	@description				My Own Ranking API server.
+//	@termsOfService				http://swagger.io/terms/
+//	@basepath					/
+//
+//	@securityDefinitions.apikey	StdAuth
+//	@name						Authorization
+//	@in							header
 func fullInstance() gin.HandlerFunc {
 	return ginSwagger.WrapHandler(
 		swaggerfiles.NewHandler(),
