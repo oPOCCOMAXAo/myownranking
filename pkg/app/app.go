@@ -5,6 +5,7 @@ import (
 	"github.com/opoccomaxao/myownranking/pkg/clients/db"
 	"github.com/opoccomaxao/myownranking/pkg/config"
 	"github.com/opoccomaxao/myownranking/pkg/services/auth"
+	"github.com/opoccomaxao/myownranking/pkg/services/list"
 	"github.com/opoccomaxao/myownranking/pkg/services/logger"
 	"github.com/opoccomaxao/myownranking/pkg/services/server"
 	"github.com/opoccomaxao/myownranking/pkg/services/user"
@@ -26,6 +27,7 @@ func Run() error {
 		server.Module(),
 		auth.Module(),
 		user.Module(),
+		list.Module(),
 
 		// Invoke
 

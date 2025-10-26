@@ -26,8 +26,8 @@ type RegisterResponse struct {
 //	@Tags			auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		RegisterRequest	true	"Body"
-//	@Success		200		{object}	RegisterResponse
+//	@Param			request	body		auth.RegisterRequest	true	"Body"
+//	@Success		200		{object}	auth.RegisterResponse
 //	@Failure		400,409	{object}	models.ErrorResponse
 //	@Failure		500		"Internal Server Error"
 //	@Router			/api/auth/register [POST]

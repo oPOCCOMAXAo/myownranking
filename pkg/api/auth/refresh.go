@@ -1,11 +1,9 @@
 package auth
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/opoccomaxao/myownranking/pkg/models"
 )
 
 type RefreshRequest struct {
@@ -24,8 +22,8 @@ type RefreshResponse struct {
 //	@Tags			auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		RefreshRequest	true	"Body"
-//	@Success		200		{object}	RefreshResponse
+//	@Param			request	body		auth.RefreshRequest	true	"Body"
+//	@Success		200		{object}	auth.RefreshResponse
 //	@Failure		400,401	{object}	models.ErrorResponse
 //	@Failure		500		"Internal Server Error"
 //	@Router			/api/auth/refresh [POST]
@@ -39,16 +37,6 @@ func (s *Service) Refresh(ctx *gin.Context) {
 
 	tokens, err := s.auth.RefreshTokens(ctx, req.RefreshToken)
 	if err != nil {
-		if errors.Is(err, models.ErrInvalidAuth) {
-			ctx.Error(err)
-
-			ctx.JSON(http.StatusUnauthorized, &models.ErrorResponse{
-				Errors: []string{"Invalid refresh token"},
-			})
-
-			return
-		}
-
 		ctx.Error(err)
 
 		return

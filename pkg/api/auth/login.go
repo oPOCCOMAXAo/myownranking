@@ -26,8 +26,8 @@ type LoginResponse struct {
 //	@Tags			auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		LoginRequest	true	"Body"
-//	@Success		200		{object}	LoginResponse
+//	@Param			request	body		auth.LoginRequest	true	"Body"
+//	@Success		200		{object}	auth.LoginResponse
 //	@Failure		400,401	{object}	models.ErrorResponse
 //	@Failure		500		"Internal Server Error"
 //	@Router			/api/auth/login [POST]

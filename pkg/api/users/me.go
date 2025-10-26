@@ -1,7 +1,6 @@
-package user
+package users
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,21 +25,10 @@ func (s *Service) GetMe(ctx *gin.Context) {
 
 	user, err := s.user.GetUserByID(ctx.Request.Context(), userID)
 	if err != nil {
-		if errors.Is(err, models.ErrNotFound) {
-			ctx.JSON(http.StatusNotFound, &models.ErrorResponse{
-				Errors: []string{"User not found"},
-			})
-
-			return
-		}
-
 		ctx.Error(err)
 
 		return
 	}
 
-	ctx.JSON(http.StatusOK, &models.UserAPI{
-		ID:   user.ID,
-		Name: user.Name,
-	})
+	ctx.JSON(http.StatusOK, models.UserAPI{}.FromModel(user, 0))
 }
