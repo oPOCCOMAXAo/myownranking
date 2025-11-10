@@ -2,6 +2,8 @@ package repo
 
 import (
 	"context"
+	stderr "errors"
+	"slices"
 
 	"github.com/opoccomaxao/myownranking/pkg/models"
 	"github.com/opoccomaxao/myownranking/pkg/services/list/structs"
@@ -127,4 +129,101 @@ func (r *Repo) UpdateList(
 	}
 
 	return nil
+}
+
+func (r *Repo) GetElementsByListID(
+	ctx context.Context,
+	listID int64,
+) ([]*models.ListElement, error) {
+	var res []*models.ListElement
+
+	err := r.db.WithContext(ctx).
+		Where("list_id = ?", listID).
+		Order("id ASC").
+		Find(&res).
+		Error
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return res, nil
+}
+
+func (r *Repo) CreateElements(
+	ctx context.Context,
+	elems []*models.ListElement,
+	batchSize int,
+) error {
+	if len(elems) == 0 {
+		return nil
+	}
+
+	err := r.db.WithContext(ctx).
+		CreateInBatches(&elems, batchSize).
+		Error
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (r *Repo) DeleteElementsByIDs(
+	ctx context.Context,
+	ids []int64,
+	batchSize int,
+) error {
+	if len(ids) == 0 {
+		return nil
+	}
+
+	var errs []error
+
+	for chunk := range slices.Chunk(ids, batchSize) {
+		err := r.db.WithContext(ctx).
+			Where("id IN ?", chunk).
+			Delete(&models.ListElement{}).
+			Error
+		if err != nil {
+			errs = append(errs, errors.WithMessagef(err, "failed to delete list element with ID %d", chunk))
+		}
+	}
+
+	return errors.WithStack(stderr.Join(errs...))
+}
+
+func (r *Repo) UpdateListElements(
+	ctx context.Context,
+	elems []*models.ListElement,
+	batchSize int,
+) error {
+	if len(elems) == 0 {
+		return nil
+	}
+
+	var errs []error
+
+	for chunk := range slices.Chunk(elems, batchSize) {
+		err := r.db.WithContext(ctx).
+			Transaction(func(tx *gorm.DB) error {
+				for _, elem := range chunk {
+					err := tx.
+						Model(elem).
+						Where("id = ?", elem.ID).
+						Select("*").
+						Updates(elem).
+						Error
+					if err != nil {
+						errs = append(errs, errors.WithMessagef(err, "failed to update list element with ID %d", elem.ID))
+					}
+				}
+
+				return nil
+			})
+		if err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	return errors.WithStack(stderr.Join(errs...))
 }

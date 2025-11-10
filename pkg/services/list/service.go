@@ -7,6 +7,7 @@ import (
 	"github.com/opoccomaxao/myownranking/pkg/models"
 	"github.com/opoccomaxao/myownranking/pkg/services/list/repo"
 	"github.com/opoccomaxao/myownranking/pkg/services/list/structs"
+	"github.com/opoccomaxao/myownranking/pkg/utils/diff"
 	"github.com/opoccomaxao/myownranking/pkg/utils/update"
 	"github.com/samber/lo"
 )
@@ -111,4 +112,57 @@ func (s *Service) RestoreList(
 		UserID:    params.UserID,
 		DeletedAt: lo.ToPtr(int64(0)),
 	})
+}
+
+func (s *Service) UpdateListElements(
+	ctx context.Context,
+	params structs.UpdateListElementsParams,
+) ([]*models.ListElement, error) {
+	list, err := s.repo.GetListByID(ctx, params.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.CheckUpdateAccessToList(ctx, params.UserID, list)
+	if err != nil {
+		return nil, err
+	}
+
+	oldElements, err := s.repo.GetElementsByListID(ctx, params.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	diff := diff.OrderedSlice(
+		oldElements,
+		params.Elements,
+		(*models.ListElement).PrepareForComparison,
+		(*models.ListElement).Equals,
+	)
+
+	err = s.repo.CreateElements(ctx, diff.Created, 1000)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.repo.UpdateListElements(ctx, diff.Updated, 1000)
+	if err != nil {
+		return nil, err
+	}
+
+	ids := lo.Map(diff.Deleted, func(el *models.ListElement, _ int) int64 {
+		return el.ID
+	})
+
+	err = s.repo.DeleteElementsByIDs(ctx, ids, 10000)
+	if err != nil {
+		return nil, err
+	}
+
+	updated, err := s.repo.GetElementsByListID(ctx, params.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return updated, nil
 }

@@ -29,3 +29,9 @@ type UpdateListParams struct {
 	IsPublic  *bool
 	DeletedAt *int64
 }
+
+type UpdateListElementsParams struct {
+	ID       int64
+	UserID   int64
+	Elements []*models.ListElement
+}

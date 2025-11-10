@@ -12,3 +12,19 @@ type ListElement struct {
 func (ListElement) TableName() string {
 	return "list_elements"
 }
+
+func (e *ListElement) PrepareForComparison(other *ListElement) {
+	if e == nil || other == nil {
+		return
+	}
+
+	e.ID = other.ID
+}
+
+func (e *ListElement) Equals(other *ListElement) bool {
+	if e == nil || other == nil {
+		return false
+	}
+
+	return *e == *other
+}
