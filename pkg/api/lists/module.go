@@ -52,9 +52,11 @@ func RegisterHandlers(
 	)
 
 	requiredGroup.GET("/api/lists/:list_id/items")
-	requiredGroup.POST("/api/lists/:list_id/items")
-	requiredGroup.PATCH("/api/lists/:list_id/items/:item_id")
-	requiredGroup.DELETE("/api/lists/:list_id/items/:item_id")
+
+	requiredGroup.POST("/api/lists/:list_id/items",
+		RequiredListID,
+		service.UpdateListElements,
+	)
 }
 
 type Service struct {

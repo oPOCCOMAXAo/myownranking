@@ -465,6 +465,73 @@ const docTemplatefull = `{
                 }
             }
         },
+        "/api/lists/{list_id}/items": {
+            "post": {
+                "security": [
+                    {
+                        "StdAuth": []
+                    }
+                ],
+                "description": "Update all elements of a list.\nReplace all elements entirely.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "lists"
+                ],
+                "summary": "Update all elements of a list.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "List ID",
+                        "name": "list_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update elements request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/lists.UpdateListElementsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lists.UpdateListElementsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
         "/api/lists/{list_id}/restore": {
             "post": {
                 "security": [
@@ -730,6 +797,28 @@ const docTemplatefull = `{
                 }
             }
         },
+        "lists.UpdateListElementsRequest": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ListElementAPI"
+                    }
+                }
+            }
+        },
+        "lists.UpdateListElementsResponse": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.ListElementAPI"
+                    }
+                }
+            }
+        },
         "lists.UpdateListRequest": {
             "type": "object",
             "properties": {
@@ -765,6 +854,23 @@ const docTemplatefull = `{
                     "type": "boolean"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ListElementAPI": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "video_url": {
                     "type": "string"
                 }
             }

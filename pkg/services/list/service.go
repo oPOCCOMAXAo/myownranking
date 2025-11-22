@@ -118,6 +118,10 @@ func (s *Service) UpdateListElements(
 	ctx context.Context,
 	params structs.UpdateListElementsParams,
 ) ([]*models.ListElement, error) {
+	for _, element := range params.Elements {
+		element.ListID = params.ID
+	}
+
 	list, err := s.repo.GetListByID(ctx, params.ID)
 	if err != nil {
 		return nil, err
